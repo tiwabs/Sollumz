@@ -145,9 +145,6 @@ class SOLLUMZ_OT_delete_portal(SOLLUMZ_OT_base, bpy.types.Operator):
 
     def run(self, context):
         selected_archetype = get_selected_archetype(context)
-        for entity in selected_archetype.entities:
-            print("------------------------------")
-            print(f"[Deletion Portal {selected_archetype.portal_index}] - entity: {entity.archetype_name} attached to portal: [id: ~~  {entity.attached_portal_id}  ~~ name: ~~  {entity.get_portal_name()}  ~~]")
         
         selected_archetype.portals.remove(selected_archetype.portal_index)
         selected_archetype.portal_index = max(
