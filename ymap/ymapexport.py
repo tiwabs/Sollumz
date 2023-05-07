@@ -17,9 +17,9 @@ def box_from_obj(obj):
     box.center_x = round(obj.location.x * 4)
     box.center_y = round(obj.location.y * 4)
     box.center_z = round(obj.location.z * 4)
-    box.length = round(obj.scale.x * 4)
-    box.width = round(obj.scale.y * 4)
-    box.height = round(obj.scale.z * 4)
+    box.length = round(obj.dimensions.x * 4)
+    box.width = round(obj.dimensions.y * 4)
+    box.height = round(obj.dimensions.z * 4)
     # TODO: Calculate sinZ and cosZ from corners coordinates.
     dir = Vector((1, 0, 0))
     dir.rotate(obj.rotation_euler)
@@ -28,6 +28,7 @@ def box_from_obj(obj):
     box.cos_z = round(dir.y * 32767)
 
     return box
+
 
 
 def triangulate_obj(obj):
@@ -165,13 +166,13 @@ def ymap_from_object(export_op, obj, exportpath, export_settings=None):
         if export_settings.ymap_box_occluders == False and child.sollum_type == SollumType.YMAP_BOX_OCCLUDER_GROUP:
             obj.ymap_properties.content_flags_toggle.has_occl = True
 
-            for cargen in child.children:
-                if cargen.sollum_type == SollumType.YMAP_BOX_OCCLUDER:
-                    ymap.box_occluders.append(box_from_obj(cargen))
-                    calculate_extents(ymap, cargen)
+            for box in child.children:
+                if box.sollum_type == SollumType.YMAP_BOX_OCCLUDER:
+                    ymap.box_occluders.append(box_from_obj(box))
+                    calculate_extents(ymap, box)
                 else:
                     export_op.report(
-                        {'WARNING'}, f"Object {cargen.name} will be skipped because it is not a {SOLLUMZ_UI_NAMES[SollumType.YMAP_BOX_OCCLUDER]} type.")
+                        {'WARNING'}, f"Object {box.name} will be skipped because it is not a {SOLLUMZ_UI_NAMES[SollumType.YMAP_BOX_OCCLUDER]} type.")
 
         # Model occluders
         if export_settings.ymap_model_occluders == False and child.sollum_type == SollumType.YMAP_MODEL_OCCLUDER_GROUP:
