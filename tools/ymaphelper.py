@@ -41,6 +41,10 @@ def create_ymap_group(sollum_type=None, selected_ymap=None, empty_name=None, sel
         selected_ymap.ymap_properties.content_flags_toggle.has_physics = True
     elif sollum_type == SollumType.YMAP_BOX_OCCLUDER_GROUP or sollum_type == SollumType.YMAP_MODEL_OCCLUDER_GROUP:
         selected_ymap.ymap_properties.content_flags_toggle.has_occl = True
+    elif sollum_type == SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP:
+        selected_ymap.ymap_properties.content_flags_toggle.has_dis_lod_lights = True
+    elif sollum_type == SollumType.YMAP_LOD_LIGHT_GROUP:
+        selected_ymap.ymap_properties.content_flags_toggle.has_lod_lights = True
     empty.parent = selected_ymap
     calculate_ymap_content_flags(selected_ymap, sollum_type)
 

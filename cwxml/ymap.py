@@ -597,11 +597,115 @@ class CarGeneratorsList(ListPropertyRequired):
         self.item_type = AttributeProperty("itemType", "CCarGen")
 
 
-# TODO: Lod Lights
+class LODLightsSOAProperty(ElementTree):
+    tag_name = "LODLightsSOA"
 
+    def __init__(self):
+        super().__init__()
+        self.direction = []
+        self.falloff = AttributeProperty("falloff", "Integer")
+        self.falloffExponent = AttributeProperty("falloffExponent", "Integer")
+        self.timeAndStateFlags = AttributeProperty("timeAndStateFlags", "Integer")
+        self.hash = AttributeProperty("hash", "Integer")
+        self.coneInnerAngle = AttributeProperty("coneInnerAngle", "Integer")
+        self.coneOuterAngleOrCapExt = AttributeProperty("coneOuterAngleOrCapExt", "Integer")
+        self.coronaIntensity = AttributeProperty("coronaIntensity", "Integer")
 
-# TODO: Distant Lod Lights
+    @classmethod
+    def from_xml(cls, element: ET.Element):
+        instance = cls()
 
+        # Pour direction, imaginons que c'est une liste de vecteurs
+        direction_elements = element.findall('.//direction/Item')
+        if not direction_elements:
+            return instance
+
+        for item in direction_elements:
+            x = float(item.find('x').attrib['value'])
+            y = float(item.find('y').attrib['value'])
+            z = float(item.find('z').attrib['value'])
+            # S'assurer que direction est initialisé comme une liste dans __init__
+            instance.direction.append((x, y, z))
+
+        # Pour falloff
+        falloff_text = element.find('falloff').text
+        instance.falloff = [int(value) for value in falloff_text.split()]
+
+        # Pour falloffExponent
+        falloff_exponent_text = element.find('falloffExponent').text
+        instance.falloffExponent = [int(value) for value in falloff_exponent_text.split()]
+
+        # Pour timeAndStateFlags
+        time_and_state_flags_text = element.find('timeAndStateFlags').text
+        instance.timeAndStateFlags = [int(value) for value in time_and_state_flags_text.split()]
+
+        # Pour hash
+        hash_text = element.find('hash').text
+        instance.hash = [int(value) for value in hash_text.split()]
+
+        # Pour coneInnerAngle
+        cone_inner_angle_text = element.find('coneInnerAngle').text
+        instance.coneInnerAngle = [int(value) for value in cone_inner_angle_text.split()]
+
+        # Pour coneOuterAngleOrCapExt
+        cone_outer_angle_or_cap_ext_text = element.find('coneOuterAngleOrCapExt').text
+        instance.coneOuterAngleOrCapExt = [int(value) for value in cone_outer_angle_or_cap_ext_text.split()]
+
+        # Pour coronaIntensity
+        corona_intensity_text = element.find('coronaIntensity').text
+        instance.coronaIntensity = [int(value) if value.isdigit() else 0 for value in corona_intensity_text.split()]
+
+        return instance
+
+    def to_xml(self):
+        pass
+
+    def __len__(self):
+        return len(self.direction)  # Ou une logique similaire basée sur ce que tu considères comme "contenu" de l'objet
+
+    def __iter__(self):
+            return iter(self.direction)  # Retourne l'itérateur pour la liste direction
+
+class DistantLODLightsSOAProperty(ElementTree):
+    tag_name = "DistantLODLightsSOA"
+
+    def __init__(self):
+        super().__init__()
+        self.position = []
+        self.RGBI = AttributeProperty("RGBI", "Integer")
+        self.numStreetLights = AttributeProperty("numStreetLights", "Integer")
+        self.category = AttributeProperty("category", "Integer")
+
+    @classmethod
+    def from_xml(cls, element: ET.Element):
+        instance = cls()
+
+        position_elements = element.findall('.//position/Item')
+        if not position_elements:
+            return instance
+        for item in position_elements:
+            x = float(item.find('x').attrib['value'])
+            y = float(item.find('y').attrib['value'])
+            z = float(item.find('z').attrib['value'])
+            instance.position.append((x, y, z))
+
+        RGBI_text = element.find('RGBI').text
+        instance.RGBI = [int(value) for value in RGBI_text.split()]
+
+        instance.numStreetLights = element.find('numStreetLights').attrib['value']
+
+        instance.category = element.find('category').attrib['value']
+
+        return instance
+
+    def to_xml(self):
+        pass
+
+    def __len__(self):
+        return len(self.position)  # Ou une logique similaire basée sur ce que tu considères comme "contenu" de l'objet
+
+    def __iter__(self):
+            return iter(self.position)  # Retourne l'itérateur pour la liste direction
 
 class Block(ElementTree):
     tag_name = "block"
@@ -637,6 +741,6 @@ class CMapData(ElementTree, AbstractClass):
         # self.instanced_data = InstancedDataProperty()
         self.time_cycle_modifiers = TimeCycleModifiersList()
         self.car_generators = CarGeneratorsList()
-        # self.lod_lights = LODLightsSOAProperty()
-        # self.distant_lod_lights = DistantLODLightsSOAProperty()
+        self.lod_lights = LODLightsSOAProperty()
+        self.distant_lod_lights = DistantLODLightsSOAProperty()
         self.block = Block()

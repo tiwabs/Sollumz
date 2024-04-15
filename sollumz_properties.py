@@ -55,6 +55,10 @@ class SollumType(str, Enum):
     YMAP_BOX_OCCLUDER = "sollumz_ymap_box_occluder"
     YMAP_MODEL_OCCLUDER = "sollumz_ymap_model_occluder"
     YMAP_CAR_GENERATOR = "sollumz_ymap_car_generator"
+    YMAP_LOD_LIGHT_GROUP = "sollumz_ymap_lod_light_group"
+    YMAP_LOD_LIGHT = "sollumz_ymap_lod_light"
+    YMAP_DISTANT_LOD_LIGHT_GROUP = "sollumz_ymap_distant_lod_light_group"
+    YMAP_DISTANT_LOD_LIGHT = "sollumz_ymap_distant_lod_light"
 
 
 class LightType(str, Enum):
@@ -251,6 +255,10 @@ YMAP_GROUP_TYPES = [
     SollumType.YMAP_BOX_OCCLUDER,
     SollumType.YMAP_MODEL_OCCLUDER,
     SollumType.YMAP_CAR_GENERATOR,
+    SollumType.YMAP_LOD_LIGHT_GROUP,
+    SollumType.YMAP_LOD_LIGHT,
+    SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP,
+    SollumType.YMAP_DISTANT_LOD_LIGHT
 ]
 
 
@@ -305,6 +313,10 @@ SOLLUMZ_UI_NAMES = {
     SollumType.YMAP_BOX_OCCLUDER: "Box Occluder",
     SollumType.YMAP_MODEL_OCCLUDER: "Model Occluder",
     SollumType.YMAP_CAR_GENERATOR: "Car Generator",
+    SollumType.YMAP_LOD_LIGHT_GROUP: "LOD Light Group",
+    SollumType.YMAP_LOD_LIGHT: "LOD Light",
+    SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP: "Distant LOD Light Group",
+    SollumType.YMAP_DISTANT_LOD_LIGHT: "Distant LOD Light",
 
     MaterialType.NONE: "None",
     MaterialType.SHADER: "Sollumz Material",

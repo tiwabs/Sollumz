@@ -24,25 +24,19 @@ def draw_ymap_properties(self, context):
         row.prop(obj.ymap_properties.content_flags_toggle, "has_hd", toggle=1)
         row.prop(obj.ymap_properties.content_flags_toggle, "has_lod", toggle=1)
         row = layout.row()
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_slod2", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_slod2", toggle=1)
         row.prop(obj.ymap_properties.content_flags_toggle, "has_int", toggle=1)
         row = layout.row()
         row.prop(obj.ymap_properties.content_flags_toggle, "has_slod", toggle=1)
         row.prop(obj.ymap_properties.content_flags_toggle, "has_occl", toggle=1)
         row = layout.row()
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_physics", toggle=1)
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_lod_lights", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_physics", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_lod_lights", toggle=1)
         row = layout.row()
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_dis_lod_lights", toggle=1)
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_critical", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_dis_lod_lights", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_critical", toggle=1)
         row = layout.row()
-        row.prop(obj.ymap_properties.content_flags_toggle,
-                 "has_grass", toggle=1)
+        row.prop(obj.ymap_properties.content_flags_toggle, "has_grass", toggle=1)
 
 
 def draw_ymap_model_occluder_properties(self, context):
@@ -67,6 +61,17 @@ def draw_ymap_car_generator_properties(self, context):
         layout.prop(obj.ymap_cargen_properties, 'body_color_remap_4')
         layout.prop(obj.ymap_cargen_properties, 'livery')
 
+def draw_ymap_distant_lod_light_properties(self, context):
+    obj = context.active_object
+    if obj and obj.sollum_type == SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP:
+        layout = self.layout
+        layout.separator()
+        layout.prop(obj.ymap_distant_lod_light_properties, 'numStreetLights')
+        layout.prop(obj.ymap_distant_lod_light_properties, 'category')
+    elif obj and obj.sollum_type == SollumType.YMAP_DISTANT_LOD_LIGHT:
+        layout = self.layout
+        layout.separator()
+        layout.prop(obj.ymap_distant_lod_light_properties, 'RGBI')
 
 class SOLLUMZ_PT_YMAP_TOOL_PANEL(bpy.types.Panel):
     bl_label = "Map Data"
@@ -95,6 +100,7 @@ class SOLLUMZ_PT_YMAP_TOOL_PANEL(bpy.types.Panel):
                 layout.operator("sollumz.create_model_occluder_group")
                 layout.operator("sollumz.create_box_occluder_group")
                 layout.operator("sollumz.create_car_generator_group")
+                layout.operator("sollumz.create_distant_lod_light_group")
             elif active_object.sollum_type == SollumType.YMAP_BOX_OCCLUDER_GROUP:
                 layout.label(text="Box Occluders Options")
                 row = layout.row()
@@ -107,6 +113,10 @@ class SOLLUMZ_PT_YMAP_TOOL_PANEL(bpy.types.Panel):
                 layout.label(text="Car Generators Options")
                 row = layout.row()
                 row.operator("sollumz.create_car_generator")
+            elif active_object.sollum_type == SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP:
+                layout.label(text="Distant LOD Lights Options")
+                row = layout.row()
+                row.operator("sollumz.create_distant_lod_light")
 
         else:
             layout.label(text="No Ymap Selected")
@@ -143,9 +153,11 @@ def register():
     SOLLUMZ_PT_OBJECT_PANEL.append(draw_ymap_properties)
     SOLLUMZ_PT_OBJECT_PANEL.append(draw_ymap_model_occluder_properties)
     SOLLUMZ_PT_OBJECT_PANEL.append(draw_ymap_car_generator_properties)
+    SOLLUMZ_PT_OBJECT_PANEL.append(draw_ymap_distant_lod_light_properties)
 
 
 def unregister():
     SOLLUMZ_PT_OBJECT_PANEL.remove(draw_ymap_properties)
     SOLLUMZ_PT_OBJECT_PANEL.remove(draw_ymap_model_occluder_properties)
     SOLLUMZ_PT_OBJECT_PANEL.remove(draw_ymap_car_generator_properties)
+    SOLLUMZ_PT_OBJECT_PANEL.remove(draw_ymap_distant_lod_light_properties)

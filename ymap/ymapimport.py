@@ -232,6 +232,71 @@ def cargen_to_obj(obj: bpy.types.Object, ymap: CMapData):
         cargen_obj.parent = group_obj
 
 
+def lod_light_to_obj(obj: bpy.types.Object, ymap: CMapData):
+    group_obj = bpy.data.objects.new("Lod Lights", None)
+    group_obj.sollum_type = SollumType.YMAP_LOD_LIGHT_GROUP
+    group_obj.parent = obj
+    group_obj.lock_location = (True, True, True)
+    group_obj.lock_rotation = (True, True, True)
+    group_obj.lock_scale = (True, True, True)
+    bpy.context.collection.objects.link(group_obj)
+    bpy.context.view_layer.objects.active = group_obj
+
+    obj.ymap_properties.content_flags_toggle.has_lod_light = True
+
+    for lod_light in ymap.lod_lights:
+        light_data = bpy.data.lights.new(name="Lod_Light_data", type='POINT')
+        light_data.energy = 100
+
+        # Create new object, pass the light data
+        light_object = bpy.data.objects.new(name="Lod_Light", object_data=light_data)
+        light_object.sollum_type = SollumType.YMAP_LOD_LIGHT
+
+        # Link object to collection in context
+        bpy.context.collection.objects.link(light_object)
+
+        print(f"Light object created: {light_object.name} direction is {lod_light}")
+
+        # Change light position
+        light_object.location = lod_light
+        light_object.parent = group_obj
+
+    return group_obj
+
+
+def distant_lod_light_to_obj(obj: bpy.types.Object, ymap: CMapData):
+    group_obj = bpy.data.objects.new("Distant Lod Lights", None)
+    group_obj.sollum_type = SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP
+    group_obj.parent = obj
+    group_obj.lock_location = (True, True, True)
+    group_obj.lock_rotation = (True, True, True)
+    group_obj.lock_scale = (True, True, True)
+    bpy.context.collection.objects.link(group_obj)
+    bpy.context.view_layer.objects.active = group_obj
+
+    obj.ymap_properties.content_flags_toggle.has_dis_lod_lights = True
+
+    index = 0
+    for distant_lod_light in ymap.distant_lod_lights:
+        index += 1
+        light_data = bpy.data.lights.new(name="Lod_Light_data", type='POINT')
+        light_data.energy = 100
+
+        # Create new object, pass the light data
+        light_object = bpy.data.objects.new(name="Lod_Light", object_data=light_data)
+        light_object.sollum_type = SollumType.YMAP_DISTANT_LOD_LIGHT
+
+        # Link object to collection in context
+        bpy.context.collection.objects.link(light_object)
+
+        print(f"Light object created: {light_object.name} position is {distant_lod_light}")
+
+        # Change light position
+        light_object.location = distant_lod_light
+        light_object.parent = group_obj
+
+    return group_obj
+
 def ymap_to_obj(ymap: CMapData):
     ymap_obj = bpy.data.objects.new(ymap.name, None)
     ymap_obj.sollum_type = SollumType.YMAP
@@ -277,8 +342,12 @@ def ymap_to_obj(ymap: CMapData):
         cargen_to_obj(ymap_obj, ymap)
 
     # TODO: lod ligths
+    if import_settings.ymap_lod_lights == False and len(ymap.lod_lights) > 0:
+        lod_light_to_obj(ymap_obj, ymap)
 
     # TODO: distant lod lights
+    if import_settings.ymap_distant_lod_lights == False and len(ymap.distant_lod_lights) > 0:
+        distant_lod_light_to_obj(ymap_obj, ymap)
 
     ymap_obj.ymap_properties.block.version = str(ymap.block.version)
     ymap_obj.ymap_properties.block.flags = str(ymap.block.flags)

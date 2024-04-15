@@ -94,6 +94,20 @@ class SollumzExportSettings(bpy.types.PropertyGroup):
         update=_save_preferences
     )
 
+    ymap_lod_lights: bpy.props.BoolProperty(
+        name="Exclude LOD Lights",
+        description="If enabled, ignore all lod lights from the selected ymap(s)",
+        default=False,
+        update=_save_preferences
+    )
+
+    ymap_distant_lod_lights: bpy.props.BoolProperty(
+        name="Exclude Distant LOD Lights",
+        description="If enabled, ignore all distant lod lights from the selected ymap(s)",
+        default=False,
+        update=_save_preferences
+    )
+
     export_lods: bpy.props.EnumProperty(
         name="Toggle LODs",
         description="Toggle LODs to export",
@@ -184,6 +198,20 @@ class SollumzImportSettings(bpy.types.PropertyGroup):
     ymap_car_generators: bpy.props.BoolProperty(
         name="Exclude Car Generators",
         description="If enabled, ignore all Car Generators from the selected ymap(s)",
+        default=False,
+        update=_save_preferences
+    )
+
+    ymap_lod_lights: bpy.props.BoolProperty(
+        name="Exclude LOD Lights",
+        description="If enabled, ignore all lod lights from the selected ymap(s)",
+        default=False,
+        update=_save_preferences
+    )
+
+    ymap_distant_lod_lights: bpy.props.BoolProperty(
+        name="Exclude Distant LOD Lights",
+        description="If enabled, ignore all distant lod lights from the selected ymap(s)",
         default=False,
         update=_save_preferences
     )

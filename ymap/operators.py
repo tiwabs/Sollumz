@@ -194,3 +194,43 @@ class SOLLUMZ_OT_create_car_generator(SOLLUMZ_OT_base, bpy.types.Operator):
         context.view_layer.objects.active = cargen_obj
 
         return True
+
+
+class SOLLUMZ_OT_create_distant_lod_light_group(SOLLUMZ_OT_base, bpy.types.Operator):
+    """Create a sollumz 'Distant LOD Light' group object"""
+    bl_idname = "sollumz.create_distant_lod_light_group"
+    bl_label = f"Distant LOD Light"
+    bl_description = "Create 'Distant LOD Light' group.\n\nOnly 1 per YMAP maximum"
+
+    @classmethod
+    def poll(cls, context):
+        aobj = context.active_object
+        existing_groups = []
+        for child in aobj.children:
+            existing_groups.append(child.name)
+        for group in existing_groups:
+            if group == "Distant LOD Light":
+                return False
+        return True
+
+    def run(self, context):
+        ymap_obj = context.active_object
+        create_ymap_group(sollum_type=SollumType.YMAP_DISTANT_LOD_LIGHT_GROUP, selected_ymap=ymap_obj, empty_name='Distant LOD Light')
+        return True
+
+class SOLLUMZ_OT_create_distant_lod_light(SOLLUMZ_OT_base, bpy.types.Operator):
+    """Create a sollumz 'Distant LOD Light' object"""
+    bl_idname = "sollumz.create_distant_lod_light"
+    bl_label = "Create Distant LOD Light"
+    bl_description = "Create a 'Distant LOD Light' object"
+
+    def run(self, context):
+        group_obj = context.active_object
+        bpy.ops.mesh.primitive_cube_add(size=2)
+        distant_lod_light_obj = bpy.context.view_layer.objects.active
+        distant_lod_light_obj.sollum_type = SollumType.YMAP_DISTANT_LOD_LIGHT
+        distant_lod_light_obj.parent = group_obj
+
+        group_obj.ymap_distant_lod_light_properties.RGBI = 0
+
+        return True

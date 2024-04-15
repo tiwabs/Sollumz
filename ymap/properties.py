@@ -131,15 +131,25 @@ class YmapCarGeneratorProperties(bpy.types.PropertyGroup):
     livery: IntProperty(name="Livery", default=-1)
 
 
+class YmapDistantLodLightProperties(bpy.types.PropertyGroup):
+    position: FloatVectorProperty()
+    RGBI: StringProperty(name="RGBI", default="")
+    numStreetLights: IntProperty(name="NumStreetLights", default=0)
+    category: IntProperty(name="Category", default=0)
+
+
 def register():
     bpy.types.Object.ymap_properties = PointerProperty(type=YmapProperties)
     bpy.types.Object.ymap_model_occl_properties = PointerProperty(
         type=YmapModelOccluderProperties)
     bpy.types.Object.ymap_cargen_properties = PointerProperty(
         type=YmapCarGeneratorProperties)
+    bpy.types.Object.ymap_distant_lod_light_properties = PointerProperty(
+        type=YmapDistantLodLightProperties)
 
 
 def unregister():
     del bpy.types.Object.ymap_properties
     del bpy.types.Object.ymap_model_occl_properties
     del bpy.types.Object.ymap_cargen_properties
+    del bpy.types.Object.ymap_distant_lod_light_properties

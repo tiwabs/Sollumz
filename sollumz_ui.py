@@ -184,6 +184,8 @@ class SOLLUMZ_PT_import_ymap(bpy.types.Panel, SollumzImportSettingsPanel):
         layout.prop(settings, "ymap_box_occluders")
         layout.prop(settings, "ymap_model_occluders")
         layout.prop(settings, "ymap_car_generators")
+        layout.prop(settings, "ymap_lod_lights")
+        layout.prop(settings, "ymap_distant_lod_lights")
 
 
 class SOLLUMZ_PT_export_include(bpy.types.Panel, SollumzExportSettingsPanel):
@@ -238,6 +240,8 @@ class SOLLUMZ_PT_export_ymap(bpy.types.Panel, SollumzExportSettingsPanel):
         layout.prop(settings, "ymap_box_occluders")
         layout.prop(settings, "ymap_model_occluders")
         layout.prop(settings, "ymap_car_generators")
+        layout.prop(settings, "ymap_lod_lights")
+        layout.prop(settings, "ymap_distant_lod_lights")
 
 
 class SOLLUMZ_PT_TOOL_PANEL(bpy.types.Panel):
@@ -339,7 +343,7 @@ class SOLLUMZ_PT_OBJ_YMAP_LOCATION(bpy.types.Panel):
 
             row.operator(SOLLUMZ_OT_copy_location.bl_idname, text="", icon='COPYDOWN') \
                .location = "{:.6f}, {:.6f}, {:.6f}".format(loc[0], loc[1], loc[2])
-            
+
             row.operator(SOLLUMZ_OT_copy_rotation.bl_idname, text="", icon='COPYDOWN') \
                .rotation = "{:.6f}, {:.6f}, {:.6f}, {:.6f}".format(rot.x, rot.y, rot.z, rot.w)
 
